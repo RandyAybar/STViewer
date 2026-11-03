@@ -1,0 +1,52 @@
+name: Bug report
+description: Something doesn't work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never attach real email, archives or screenshots that show real mail.** Redact names
+        and addresses, or reproduce the problem with a synthetic file.
+        Security issues: report privately via the Security tab instead.
+  - type: input
+    id: version
+    attributes:
+      label: STViewer version
+      placeholder: "0.1.0 (app) / output of `stv --version`"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options: [Windows, macOS, Linux, Other]
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options: [Desktop app, CLI (stv), Agent access (MCP), Other]
+    validations:
+      required: true
+  - type: input
+    id: format
+    attributes:
+      label: Archive format
+      placeholder: "e.g. Unicode PST from Outlook 2016, Thunderbird profile, Gmail Takeout mbox"
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Commands, clicks, search queries. Include redacted `stv ... --json` or `dump` example output if relevant.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error output
+      render: text

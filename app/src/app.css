@@ -1,0 +1,267 @@
+/* `data-theme` ("light" | "dark") is set on <html> by public/theme.js before first paint and
+   kept up to date by lib/settings.svelte.ts (Settings → Appearance; "System" follows the OS). */
+:root {
+  color-scheme: light;
+  --font: system-ui, "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace;
+
+  /* Brand: warm paper #F0EEE9 (light), warm graphite #57504C (dark), teal #2F6364 accent. */
+  --bg: #f0eee9;
+  --bg-2: #e6e3dc;
+  --bg-3: #dcd8cf;
+  --fg: #1f1c1a;
+  --fg-2: #5b5450;
+  --fg-3: #857d77;
+  --border: #d3cec4;
+  --accent: #2f6364;
+  --accent-fg: #ffffff;
+  --sel: #d2e0dc;
+  --sel-focus: #2f6364;
+  --hover: #e4e1da;
+  --danger: #b3261e;
+  --warn: #9a5b00;
+  --mark: #f3e29a;
+  --shadow: 0 8px 28px rgba(40, 32, 28, 0.2);
+  /* Document pages (mail bodies, attachment text cards) stay dark-on-white in both themes. */
+  --page: #ffffff;
+  --page-fg: #333333;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #57504c;
+  --bg-2: #4a4440;
+  --bg-3: #645c57;
+  --fg: #f4f1ec;
+  --fg-2: #ddd6cf;
+  --fg-3: #bdb5ad;
+  --border: #6c645f;
+  /* #2F6364 itself is too dark for text on graphite; links/fills use a light tint of it. */
+  --accent: #8fc8c6;
+  --accent-fg: #1c2b2b;
+  --sel: #3f6463;
+  --sel-focus: #8fc8c6;
+  --hover: #605854;
+  --danger: #ff9a92;
+  --warn: #f3c06a;
+  --mark: #7a6420;
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font: 13px/1.4 var(--font);
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  white-space: nowrap;
+}
+.btn:hover:not(:disabled) {
+  background: var(--hover);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+.btn.primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+  background: var(--accent);
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fg-2);
+}
+.icon-btn:hover {
+  background: var(--hover);
+  color: var(--fg);
+}
+
+input[type="text"],
+input[type="search"],
+select {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  padding: 4px 8px;
+  outline: none;
+}
+input:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.selectable {
+  user-select: text;
+}
+
+.muted {
+  color: var(--fg-2);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--bg-3);
+  color: var(--fg-2);
+  font-size: 11px;
+  line-height: 17px;
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+/* Button that looks like a link. */
+.link {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--accent);
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Centered empty / loading / error message filling a pane. */
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  padding: 24px;
+  text-align: center;
+}
+.placeholder p {
+  margin: 0;
+  line-height: 1.6;
+}
+.placeholder.error {
+  color: var(--danger);
+  user-select: text;
+}
+
+/* Wrapping row of toggleable filter chips (attachment categories, tags). */
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex: none;
+  max-height: 64px;
+  overflow: auto;
+}
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.filter-chip:hover {
+  background: var(--hover);
+}
+.filter-chip.on {
+  background: var(--sel);
+  border-color: var(--sel-focus);
+}
+.filter-chip .n {
+  color: var(--fg-3);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Indeterminate progress spinner. */
+.spin {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border: 2px solid var(--accent);
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--fg-3) 45%, transparent);
+  border-radius: 8px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--fg-3) 70%, transparent);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+mark,
+.snippet b {
+  background: var(--mark);
+  color: inherit;
+  font-weight: 600;
+  border-radius: 2px;
+}

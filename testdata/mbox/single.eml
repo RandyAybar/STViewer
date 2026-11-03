@@ -1,0 +1,78 @@
+From: Rich Sender <rich@example.com>
+To: a@example.com
+Subject: Attachments galore
+Date: Wed, 02 Mar 2022 08:30:00 -0500
+Message-ID: <rich@example.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="mix"
+
+--mix
+Content-Type: multipart/related; boundary="rel"
+
+--rel
+Content-Type: multipart/alternative; boundary="alt"
+
+--alt
+Content-Type: text/plain; charset=utf-8
+
+Plain body ünïcode
+--alt
+Content-Type: text/html; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><p>HTML body caf=E9</p><img src=3D"cid:logo@x"></body></html>
+--alt--
+--rel
+Content-Type: image/png
+Content-ID: <logo@x>
+Content-Transfer-Encoding: base64
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAA=
+--rel--
+--mix
+Content-Type: application/pdf; name="report.pdf"
+Content-Disposition: attachment; filename="report.pdf"
+Content-Transfer-Encoding: base64
+
+JVBERi0xLjQKJeLjz9MKMSAwIG9iajw8Pj5lbmRvYmoKdHJhaWxlcjw8Pj4KJSVFT0YK
+--mix
+Content-Type: message/rfc822
+Content-Disposition: attachment
+
+From: Inner <inner@example.com>
+Subject: Inner message
+Message-ID: <inner@example.com>
+Content-Type: multipart/mixed; boundary="in"
+
+--in
+Content-Type: text/plain
+
+Inner body
+--in
+Content-Type: message/rfc822
+
+From: Deep <deep@example.com>
+Subject: Deepest
+Content-Type: text/plain
+
+Deepest body
+--in
+Content-Type: text/csv; name="data.csv"
+Content-Disposition: attachment; filename="data.csv"
+
+a,b
+1,2
+--in--
+--mix
+Content-Type: application/ms-tnef; name="winmail.dat"
+Content-Disposition: attachment; filename="winmail.dat"
+Content-Transfer-Encoding: base64
+
+eJ8+IgAAAQ==
+--mix
+Content-Type: application/vnd.ms-outlook; name="fwd.msg"
+Content-Disposition: attachment; filename="fwd.msg"
+Content-Transfer-Encoding: base64
+
+0M8R4KGxGuE=
+--mix--

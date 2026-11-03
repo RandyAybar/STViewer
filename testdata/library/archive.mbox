@@ -1,0 +1,48 @@
+From alice@stv.test Mon Jan  2 09:00:00 2023
+Message-ID: <a1@stv.test>
+Date: Mon, 02 Jan 2023 09:00:00 +0000
+From: Alice Archer <alice@stv.test>
+To: Bob Baker <bob@stv.test>
+Subject: Project kickoff
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Let's discuss the zeppelin budget on Thursday.
+>From the archive: quoted line stays quoted.
+
+From carol@stv.test Wed Jan  4 11:30:00 2023
+Message-ID: <c1@stv.test>
+In-Reply-To: <b1@stv.test>
+References: <a1@stv.test> <b1@stv.test>
+Date: Wed, 04 Jan 2023 11:30:00 +0000
+From: Carol Chen <carol@stv.test>
+To: Alice Archer <alice@stv.test>, Bob Baker <bob@stv.test>
+Subject: Re: Project kickoff
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="sep-c1"
+
+--sep-c1
+Content-Type: text/plain; charset=utf-8
+
+Agreed. Notes from the hangar visit attached.
+
+--sep-c1
+Content-Type: text/plain; name="notes.txt"
+Content-Disposition: attachment; filename="notes.txt"
+Content-Transfer-Encoding: base64
+
+emVwcGVsaW4gaGFuZ2FyIG5vdGVzCmxpbmUgdHdvCg==
+
+--sep-c1--
+
+From dave@stv.test Fri Jan  6 12:00:00 2023
+Message-ID: <d1@stv.test>
+Date: Fri, 06 Jan 2023 12:00:00 +0000
+From: Dave Doe <dave@stv.test>
+To: Alice Archer <alice@stv.test>
+Subject: Lunch on Friday?
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Pizza at noon?
+

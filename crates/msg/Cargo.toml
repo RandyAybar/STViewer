@@ -1,0 +1,19 @@
+[package]
+name = "stv-msg"
+description = "Outlook .msg (MS-OXMSG) and TNEF/winmail.dat (MS-OXTNEF) reader for STViewer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+mail-model.workspace = true
+mapi-props.workspace = true
+cfb = "0.14"
+memmap2.workspace = true
+rayon.workspace = true
+tracing.workspace = true

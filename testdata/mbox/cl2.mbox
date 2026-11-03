@@ -1,0 +1,27 @@
+From x@example.com Sat Apr  2 10:00:00 2022
+From: x@example.com
+Subject: cl2 one
+Content-Length: 58
+
+Line one
+From someone Mon Jan  1 00:00:00 2001
+Line three
+
+From y@example.com Sat Apr  2 11:00:00 2022
+From: y@example.com
+Subject: cl2 two
+Content-Length: 4
+
+body
+From z@example.com Sat Apr  2 12:00:00 2022
+From: z@example.com
+Subject: wrong length
+Content-Length: 999999
+
+short body
+
+From w@example.com Sat Apr  2 13:00:00 2022
+From: w@example.com
+Subject: after wrong
+
+tail

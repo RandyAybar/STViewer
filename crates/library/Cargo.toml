@@ -1,0 +1,29 @@
+[package]
+name = "stv-library"
+description = "STViewer library: source registry, background indexing, threading, dedupe, tags, export and search facade"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+mail-model.workspace = true
+mapi-props.workspace = true
+stv-pst.workspace = true
+stv-mbox.workspace = true
+stv-msg.workspace = true
+stv-index.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+mail-builder = "2"
+base64 = "0.22"
+dirs = "6"
+
+[dev-dependencies]
+mail-parser.workspace = true
+tempfile = "3"

@@ -1,0 +1,47 @@
+Message-ID: <b1@stv.test>
+In-Reply-To: <a1@stv.test>
+References: <a1@stv.test>
+Date: Tue, 03 Jan 2023 10:15:00 +0000
+From: Bob Baker <bob@stv.test>
+To: Alice Archer <alice@stv.test>
+Cc: Carol Chen <carol@stv.test>
+Subject: Re: Project kickoff
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="sep-b1"
+
+--sep-b1
+Content-Type: multipart/related; boundary="rel-b1"
+
+--rel-b1
+Content-Type: multipart/alternative; boundary="alt-b1"
+
+--alt-b1
+Content-Type: text/plain; charset=utf-8
+
+Here are the zeppelin numbers. Chart inline.
+
+--alt-b1
+Content-Type: text/html; charset=utf-8
+
+<html><body><p>Here are the <b>zeppelin</b> numbers.</p><img src="cid:chart@stv.test"></body></html>
+
+--alt-b1--
+
+--rel-b1
+Content-Type: image/png; name="chart.png"
+Content-ID: <chart@stv.test>
+Content-Disposition: inline; filename="chart.png"
+Content-Transfer-Encoding: base64
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAA=
+
+--rel-b1--
+
+--sep-b1
+Content-Type: text/csv; name="budget.csv"
+Content-Disposition: attachment; filename="budget.csv"
+Content-Transfer-Encoding: base64
+
+aXRlbSxjb3N0CmhlbGl1bSwxMjAwCmZhYnJpYyw4MDAK
+
+--sep-b1--

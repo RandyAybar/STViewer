@@ -1,0 +1,19 @@
+[package]
+name = "stv-pst"
+description = "Read-only Outlook PST/OST reader (ANSI, Unicode, 4K-page OST) for STViewer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+mail-model.workspace = true
+mapi-props.workspace = true
+memmap2.workspace = true
+flate2.workspace = true
+tracing.workspace = true
+crc32fast = "1"

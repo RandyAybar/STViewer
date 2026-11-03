@@ -1,0 +1,13 @@
+From a@example.com Mon Feb  7 09:00:00 2022
+From: a@example.com
+Subject: mboxrd
+
+>From quoted once
+>>From quoted twice
+> From not an escape
+
+From b@example.com Mon Feb  7 09:05:00 2022
+From: b@example.com
+Subject: second
+
+done

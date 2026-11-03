@@ -1,0 +1,27 @@
+334
+From: Apple 2 <apple2@example.com>
+Subject: Apple partial
+Date: Thu, 23 Jun 2022 12:00:00 +0000
+Content-Type: multipart/mixed; boundary="p"
+
+--p
+Content-Type: text/plain
+
+See attached
+--p
+Content-Type: application/pdf; name="report.pdf"
+Content-Disposition: attachment; filename="report.pdf"
+Content-Transfer-Encoding: base64
+
+
+--p--
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>date-received</key>
+	<integer>1656000000</integer>
+	<key>flags</key>
+	<integer>0</integer>
+</dict>
+</plist>

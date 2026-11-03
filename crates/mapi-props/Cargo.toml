@@ -1,0 +1,19 @@
+[package]
+name = "mapi-props"
+description = "MAPI property types, tag catalogue, and MAPI→mail-model conversion shared by PST, MSG and TNEF readers"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+mail-model.workspace = true
+encoding_rs.workspace = true
+
+[dev-dependencies]
+# Reference LZFu compressor used to round-trip our decompressor in tests.
+compressed-rtf.workspace = true

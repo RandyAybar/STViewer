@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "STViewer",
+  "version": "0.1.0",
+  "identifier": "org.stviewer.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "title": "STViewer",
+        "width": 1400,
+        "height": 880,
+        "minWidth": 900,
+        "minHeight": 560,
+        "dragDropEnabled": true
+      }
+    ],
+    "security": {
+      "csp": {
+        "default-src": "'self'",
+        "script-src": "'self'",
+        "style-src": "'self' 'unsafe-inline'",
+        "img-src": "'self' data: stv: http://stv.localhost https: http:",
+        "font-src": "'self' data:",
+        "connect-src": "ipc: http://ipc.localhost",
+        "frame-src": "'self' about:",
+        "object-src": "'none'",
+        "base-uri": "'none'",
+        "form-action": "'none'"
+      },
+      "devCsp": null,
+      "dangerousDisableAssetCspModification": ["style-src"]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "publisher": "STViewer contributors",
+    "copyright": "Copyright (c) 2026 STViewer contributors",
+    "license": "MIT OR Apache-2.0",
+    "category": "Productivity",
+    "shortDescription": "Fast local viewer and search for email archives",
+    "longDescription": "STViewer opens PST/OST, mbox, EML/EMLX, MSG and TNEF mail archives locally, indexes messages and attachments for full-text search, and can optionally share selected mailboxes read-only with AI coding agents over a local MCP server.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "macOS": {
+      "signingIdentity": "-",
+      "minimumSystemVersion": "11.0"
+    }
+  }
+}

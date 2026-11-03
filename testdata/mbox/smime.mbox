@@ -1,0 +1,40 @@
+From s@example.com Sun May  1 10:00:00 2022
+From: Enc <enc@example.com>
+Subject: Encrypted
+MIME-Version: 1.0
+Content-Type: application/pkcs7-mime; smime-type=enveloped-data; name="smime.p7m"
+Content-Disposition: attachment; filename="smime.p7m"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHA6CAMIACAQAxggE=
+
+From s@example.com Sun May  1 11:00:00 2022
+From: Signer <sig@example.com>
+Subject: Clear signed
+MIME-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="sig"
+
+--sig
+Content-Type: text/plain
+
+Signed visible text
+--sig
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIIBAA==
+--sig--
+
+From s@example.com Sun May  1 12:00:00 2022
+From: Opaque <opaque@example.com>
+Subject: Opaque signed
+MIME-Version: 1.0
+Content-Type: application/pkcs7-mime; smime-type=signed-data; name="smime.p7m"
+Content-Transfer-Encoding: base64
+
+MIIBCQYJKoZIhvcNAQcCoIH7MIH4AgEBMQAwge4GCSqGSIb3DQEHAaCB4ASB3UNvbnRlbnQtVHlw
+ZTogbXVsdGlwYXJ0L21peGVkOyBib3VuZGFyeT0ic3giDQoNCi0tc3gNCkNvbnRlbnQtVHlwZTog
+dGV4dC9wbGFpbg0KDQpPcGFxdWUgc2lnbmVkIHRleHQNCi0tc3gNCkNvbnRlbnQtVHlwZTogdGV4
+dC9wbGFpbjsgbmFtZT0ibm90ZS50eHQiDQpDb250ZW50LURpc3Bvc2l0aW9uOiBhdHRhY2htZW50
+OyBmaWxlbmFtZT0ibm90ZS50eHQiDQoNCm5vdGUNCi0tc3gtLQ0KMQA=

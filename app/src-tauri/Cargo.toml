@@ -1,0 +1,64 @@
+[package]
+name = "stviewer-app"
+description = "STViewer desktop app (Tauri 2)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[lib]
+name = "stviewer_app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[features]
+# Embed the built frontend (`../dist`) and serve it over the custom protocol instead of
+# loading `devUrl`. `tauri build` enables `tauri/custom-protocol` itself; this alias lets a
+# plain `cargo build -p stviewer-app --features custom-protocol` produce the same binary.
+custom-protocol = ["tauri/custom-protocol"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+mail-model.workspace = true
+stv-library.workspace = true
+stv-mcp.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+base64 = "0.22"
+percent-encoding = "2"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "gif", "bmp", "tiff", "webp"] }
+tauri-plugin-single-instance = "2"
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "env-filter", "std"] }
+tracing-appender = "0.2"
+# Native error box for failures before/without a running event loop. Same version as
+# tauri-plugin-dialog uses; its Linux backend feature (gtk3) is enabled through that plugin.
+rfd = { version = "0.17", default-features = false }
+# Document thumbnails: PDF first pages (pure Rust, memory-safe; run in a worker process
+# with a memory budget, as it allocates whatever a file declares) and the preview
+# pictures that OOXML/OpenDocument files embed.
+hayro = "0.9"
+zip = { version = "9", default-features = false, features = ["deflate-flate2-zlib-rs"] }
+# Content hash keying the on-disk preview cache (already in the tree through lopdf).
+sha2 = "0.10"
+# Text of document attachments for the "text card" tiles.
+stv-index.workspace = true
+
+# macOS system renderers: ImageIO for images the `image` crate cannot read (CCITT fax and
+# palette TIFFs, HEIC), Quick Look for document thumbnails (PDF, Office, iWork, text).
+[target.'cfg(target_os = "macos")'.dependencies]
+block2 = "0.6"
+objc2 = "0.6"
+objc2-core-foundation = { version = "0.3", default-features = false, features = ["std", "CFCGTypes", "CFData", "CFDictionary", "CFNumber", "CFString"] }
+objc2-core-graphics = { version = "0.3", default-features = false, features = ["std", "CGImage"] }
+objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSError", "NSString", "NSURL"] }
+objc2-image-io = { version = "0.3", default-features = false, features = ["std", "CGImageSource", "CGImageDestination", "CGImageProperties", "objc2-core-graphics"] }
+objc2-quick-look-thumbnailing = { version = "0.3", default-features = false, features = ["std", "block2", "objc2-core-foundation", "objc2-core-graphics", "QLThumbnailGenerationRequest", "QLThumbnailGenerator", "QLThumbnailRepresentation"] }

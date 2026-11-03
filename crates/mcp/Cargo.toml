@@ -1,0 +1,32 @@
+[package]
+name = "stv-mcp"
+description = "Read-only MCP server exposing an STViewer library to coding agents"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+mail-model.workspace = true
+stv-library.workspace = true
+stv-index.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+rmcp = { version = "3.8", features = ["server", "macros", "transport-streamable-http-server"] }
+axum = { version = "0.8", default-features = false, features = ["http1", "tokio"] }
+tokio = { version = "1", features = ["net", "sync", "rt", "macros", "time"] }
+tokio-util = "0.7"
+base64 = "0.22"
+percent-encoding = "2"
+getrandom = "0.3"
+
+[dev-dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["json"] }
+rmcp = { version = "3.8", features = ["client", "transport-streamable-http-client-reqwest"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+tempfile = "3"

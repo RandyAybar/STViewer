@@ -1,0 +1,618 @@
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge DST gap
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge1@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e1"
+
+--e1
+Content-Type: text/plain
+
+edge 1
+--e1
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:Pacific Standard Time
+BEGIN:STANDARD
+DTSTART:16010101T020000
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0800
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=1SU;BYMONTH=11
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETFROM:-0800
+TZOFFSETTO:-0700
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=2SU;BYMONTH=3
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:e1@example.org
+DTSTART;TZID=Pacific Standard Time:20260308T023000
+DTEND;TZID=Pacific Standard Time:20260308T033000
+ORGANIZER;CN=Olivia Organizer:mailto:olivia@example.org
+END:VEVENT
+END:VCALENDAR
+
+--e1--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge DST overlap
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge2@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e2"
+
+--e2
+Content-Type: text/plain
+
+edge 2
+--e2
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:Pacific Standard Time
+BEGIN:STANDARD
+DTSTART:16010101T020000
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0800
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=1SU;BYMONTH=11
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETFROM:-0800
+TZOFFSETTO:-0700
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=2SU;BYMONTH=3
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:e2@example.org
+DTSTART;TZID=Pacific Standard Time:20261101T013000
+DTEND;TZID=Pacific Standard Time:20261101T023000
+ORGANIZER;CN=Olivia Organizer:mailto:olivia@example.org
+END:VEVENT
+END:VCALENDAR
+
+--e2--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge date duration
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge3@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e3"
+
+--e3
+Content-Type: text/plain
+
+edge 3
+--e3
+Content-Type: text/calendar; charset=UTF-8
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+BEGIN:VEVENT
+UID:e3@example.org
+DTSTART;VALUE=DATE:20260704
+DURATION:P3D
+END:VEVENT
+END:VCALENDAR
+
+--e3--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge exception first
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge4@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e4"
+
+--e4
+Content-Type: text/plain
+
+edge 4
+--e4
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:e4@example.org
+RECURRENCE-ID:20260316T090000Z
+DTSTART:20260316T150000Z
+DTEND:20260316T160000Z
+ORGANIZER;CN=Olivia Organizer:mailto:olivia@example.org
+END:VEVENT
+BEGIN:VEVENT
+UID:e4@example.org
+DTSTART:20260302T090000Z
+DTEND:20260302T100000Z
+RRULE:FREQ=WEEKLY;COUNT=5
+ORGANIZER;CN=Olivia Organizer:mailto:olivia@example.org
+END:VEVENT
+END:VCALENDAR
+
+--e4--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge counter
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge5@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e5"
+
+--e5
+Content-Type: text/plain
+
+edge 5
+--e5
+Content-Type: text/calendar; charset=UTF-8; method=COUNTER
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:COUNTER
+BEGIN:VEVENT
+UID:e5@example.org
+DTSTART:20260401T090000Z
+DTEND:20260401T100000Z
+ORGANIZER;CN=Olivia Organizer:mailto:olivia@example.org
+ATTENDEE;PARTSTAT=TENTATIVE;CN=Alice Example:mailto:alice@example.org
+END:VEVENT
+END:VCALENDAR
+
+--e5--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge tentative reply
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge6@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e6"
+
+--e6
+Content-Type: text/plain
+
+edge 6
+--e6
+Content-Type: text/calendar; charset=UTF-8; method=REPLY
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REPLY
+BEGIN:VEVENT
+UID:e6@example.org
+DTSTART:20260401T090000Z
+DTEND:20260401T100000Z
+ORGANIZER;CN=Olivia Organizer:mailto:olivia@example.org
+ATTENDEE;PARTSTAT=TENTATIVE;CN=Alice Example:MAILTO:alice@example.org
+END:VEVENT
+END:VCALENDAR
+
+--e6--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge lowercase props
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge7@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e7"
+
+--e7
+Content-Type: text/plain
+
+edge 7
+--e7
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+begin:vevent
+uid:e7@example.org
+dtstart:20260402T090000Z
+dtend:20260402T100000Z
+location:Lowercase lagoon
+end:vevent
+END:VCALENDAR
+
+--e7--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge tab fold
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge8@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e8"
+
+--e8
+Content-Type: text/plain
+
+edge 8
+--e8
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:e8@example.org
+DTSTART:20260403T090000Z
+LOCATION:Tab
+	folded tapir hall
+END:VEVENT
+END:VCALENDAR
+
+--e8--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge quoted tzid
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge9@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e9"
+
+--e9
+Content-Type: text/plain
+
+edge 9
+--e9
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:Pacific Standard Time
+BEGIN:STANDARD
+DTSTART:16010101T020000
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0800
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=1SU;BYMONTH=11
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETFROM:-0800
+TZOFFSETTO:-0700
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=2SU;BYMONTH=3
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:e9@example.org
+DTSTART;TZID="Pacific Standard Time":20260601T090000
+DTEND;TZID="Pacific Standard Time":20260601T100000
+END:VEVENT
+END:VCALENDAR
+
+--e9--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge end before start
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge10@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e10"
+
+--e10
+Content-Type: text/plain
+
+edge 10
+--e10
+Content-Type: text/calendar; charset=UTF-8
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+BEGIN:VEVENT
+UID:e10@example.org
+DTSTART:20260601T100000Z
+DTEND:20260601T090000Z
+END:VEVENT
+END:VCALENDAR
+
+--e10--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge iana no vtz Tokyo
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge11@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e11"
+
+--e11
+Content-Type: text/plain
+
+edge 11
+--e11
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:e11@example.org
+DTSTART;TZID=Asia/Tokyo:20260601T090000
+END:VEVENT
+END:VCALENDAR
+
+--e11--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge windows name no vtz
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge12@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e12"
+
+--e12
+Content-Type: text/plain
+
+edge 12
+--e12
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:e12@example.org
+DTSTART;TZID=W. Europe Standard Time:20260601T090000
+END:VEVENT
+END:VCALENDAR
+
+--e12--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge only vtodo completed
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge13@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e13"
+
+--e13
+Content-Type: text/plain
+
+edge 13
+--e13
+Content-Type: text/calendar; charset=UTF-8
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+BEGIN:VTODO
+UID:e13@example.org
+DUE:20261201T230000Z
+COMPLETED:20261130T120000Z
+STATUS:COMPLETED
+PERCENT-COMPLETE:250
+END:VTODO
+END:VCALENDAR
+
+--e13--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge no dtstart
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge14@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e14"
+
+--e14
+Content-Type: text/plain
+
+edge 14
+--e14
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:e14@example.org
+SUMMARY:no start
+END:VEVENT
+END:VCALENDAR
+
+--e14--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge application ics
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge15@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e15"
+
+--e15
+Content-Type: text/plain
+
+edge 15
+--e15
+Content-Type: application/ics; name="x.ics"
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:e15@example.org
+DTSTART:20260404T090000Z
+END:VEVENT
+END:VCALENDAR
+
+--e15--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge vcalendar 1.0
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge16@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e16"
+
+--e16
+Content-Type: text/plain
+
+edge 16
+--e16
+Content-Type: text/calendar; charset=UTF-8
+
+BEGIN:VCALENDAR
+VERSION:1.0
+BEGIN:VEVENT
+DTSTART:20260405T090000Z
+DTEND:20260405T100000Z
+SUMMARY:vcal one
+END:VEVENT
+END:VCALENDAR
+
+--e16--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge garbage calendar
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge17@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e17"
+
+--e17
+Content-Type: text/plain
+
+edge 17
+--e17
+Content-Type: text/calendar; charset=UTF-8
+
+this is not a calendar at all
+:::;;;
+
+--e17--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge utc offset tzid
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge18@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="e18"
+
+--e18
+Content-Type: text/plain
+
+edge 18
+--e18
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:(UTC+01:00) Amsterdam, Berlin
+BEGIN:STANDARD
+DTSTART:16010101T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:e18@example.org
+DTSTART;TZID=(UTC+01:00) Amsterdam, Berlin:20260601T090000
+END:VEVENT
+END:VCALENDAR
+
+--e18--
+
+From qa@example.org Mon Mar  2 10:00:00 2026
+From: Olivia Organizer <olivia@example.org>
+To: Alice Example <alice@example.org>
+Subject: Edge attendee roles
+Date: Mon, 02 Mar 2026 10:00:00 +0000
+Message-ID: <edge19@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="e19"
+
+--e19
+Content-Type: text/plain
+
+edge 19
+--e19
+Content-Type: text/calendar; charset=UTF-8; method=REQUEST
+
+BEGIN:VCALENDAR
+PRODID:-//Example Corp//QA Generator//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:e19@example.org
+DTSTART:20260407T090000Z
+DTEND:20260407T093000Z
+ORGANIZER;CN=Olivia Organizer:mailto:olivia@example.org
+ATTENDEE;ROLE=CHAIR;CN=Olivia Organizer:mailto:olivia@example.org
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;CN=Alice Example:mailto:alice@example.org
+ATTENDEE;ROLE=OPT-PARTICIPANT;CN=Bob Example:mailto:bob@example.org
+ATTENDEE;ROLE=NON-PARTICIPANT;CN=Carol Example:mailto:carol@example.org
+ATTENDEE;CUTYPE=RESOURCE;CN=Projector:mailto:projector@example.org
+ATTENDEE;CUTYPE=ROOM;CN=Room 2B:mailto:room2b@example.org
+END:VEVENT
+END:VCALENDAR
+
+--e19--

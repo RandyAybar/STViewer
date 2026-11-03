@@ -1,0 +1,26 @@
+[package]
+name = "stv"
+description = "STViewer command-line interface (`stv`): add, index, search, read and export email archives"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "stv"
+path = "src/main.rs"
+
+[dependencies]
+mail-model.workspace = true
+stv-library.workspace = true
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+html-escape = "0.3"
+
+[dev-dependencies]
+tempfile = "3"

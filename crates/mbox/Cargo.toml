@@ -1,0 +1,27 @@
+[package]
+name = "stv-mbox"
+description = "mbox, Thunderbird, Gmail Takeout, .eml and Apple Mail .emlx reader for STViewer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+# IANA time zones for iCalendar TZIDs without a VTIMEZONE; the database is compiled in so
+# results don't depend on the host (Windows ships none).
+jiff = { version = "0.2", default-features = false, features = ["std", "tzdb-bundle-always"] }
+mail-model.workspace = true
+mail-parser = { workspace = true, features = ["full_encoding"] }
+memmap2.workspace = true
+memchr.workspace = true
+rayon.workspace = true
+tracing.workspace = true
+dirs = "7"
+xxhash-rust = { version = "0.8", features = ["xxh3"] }
+
+[dev-dependencies]
+tempfile = "3"

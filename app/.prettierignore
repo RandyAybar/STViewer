@@ -1,0 +1,5 @@
+dist/
+src-tauri/
+package-lock.json
+# Owned and formatted with the fixture generator's own conventions.
+scripts/make-fixtures.mjs

@@ -1,0 +1,29 @@
+# Rust
+/target
+
+# Frontend
+node_modules/
+/app/dist
+# Old ad-hoc dev screenshots; README screenshots live in docs/screenshots/.
+/app/screenshots/
+# Tauri regenerates these on every build (create-tauri-app ignores them too).
+/app/src-tauri/gen/schemas
+
+# Local-only test data (multi-GB downloads; see testdata/README.md)
+/testdata/large/
+
+# STViewer indexes / library data created by tests or manual runs
+*.stvindex/
+
+# Secrets and local environment
+.env
+.env.*
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.idea/
+.vscode/

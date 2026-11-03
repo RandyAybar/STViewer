@@ -1,0 +1,23 @@
+﻿
+
+From sender0@example.com Thu Jan  6 00:00:00 2022
+From: Sender 0 <sender0@example.com>
+Subject: CRLF message 0
+Date: Thu, 06 Jan 2022 00:00:00 +0000
+
+Body line 0
+
+From sender1@example.com Thu Jan  6 01:00:00 2022
+From: Sender 1 <sender1@example.com>
+Subject: CRLF message 1
+Date: Thu, 06 Jan 2022 01:00:00 +0000
+
+Body line 1
+
+From sender2@example.com Thu Jan  6 02:00:00 2022
+From: Sender 2 <sender2@example.com>
+Subject: CRLF message 2
+Date: Thu, 06 Jan 2022 02:00:00 +0000
+
+Body line 2
+

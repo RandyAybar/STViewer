@@ -1,0 +1,20 @@
+From - Mon Jun  6 17:00:00 2022
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+From: TB 7 <tb7@example.com>
+Subject: Exported one
+Date: Mon, 06 Jun 2022 17:00:00 +0000
+Message-ID: <tb7@example.com>
+
+Thunderbird body 7
+
+From - Mon Jun  6 18:00:00 2022
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+From: TB 8 <tb8@example.com>
+Subject: Exported two
+Date: Mon, 06 Jun 2022 18:00:00 +0000
+Message-ID: <tb8@example.com>
+
+Thunderbird body 8
+

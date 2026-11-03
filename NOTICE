@@ -1,0 +1,36 @@
+STViewer
+Copyright (c) 2026 STViewer contributors
+
+Licensed under either of the Apache License, Version 2.0 (LICENSE-APACHE) or the
+MIT license (LICENSE-MIT), at your option.
+
+-------------------------------------------------------------------------------
+Test data (not part of any built binary or installer)
+-------------------------------------------------------------------------------
+
+testdata/msg/poi/ contains unmodified sample files from the Apache POI test corpus
+(https://github.com/apache/poi/tree/trunk/test-data, hsmf/ and hmef/), licensed under
+the Apache License, Version 2.0. Apache POI's NOTICE reads, in relevant part:
+
+    Apache POI
+    Copyright 2003-2026 The Apache Software Foundation
+
+    This product includes software developed at
+    The Apache Software Foundation (https://www.apache.org/).
+
+All other files under testdata/ were written for this project and are covered by the
+project license; see testdata/README.md.
+
+-------------------------------------------------------------------------------
+Third-party dependencies
+-------------------------------------------------------------------------------
+
+Binaries link Rust crates (see Cargo.lock) and the desktop app bundles JavaScript
+packages (see app/package-lock.json), each under its own license. All are permissive
+(MIT, Apache-2.0, BSD, ISC, Zlib, Unicode-3.0, BSL-1.0, CC0) or file-level copyleft
+(MPL-2.0, unmodified); the allow-list is enforced by `cargo deny check licenses`
+(deny.toml).
+
+The binaries include the IANA time zone database (public domain, via the jiff-tzdb
+crate), and crates/mbox/src/tzid.rs contains a Windows-to-IANA time zone table derived
+from the Unicode CLDR `windowsZones` data (Unicode License v3).

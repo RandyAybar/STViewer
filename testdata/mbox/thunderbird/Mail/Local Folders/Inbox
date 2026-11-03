@@ -1,0 +1,40 @@
+From - Mon Jun  6 11:00:00 2022
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+From: TB 1 <tb1@example.com>
+Subject: TB read
+Date: Mon, 06 Jun 2022 11:00:00 +0000
+Message-ID: <tb1@example.com>
+
+Thunderbird body 1
+
+From - Mon Jun  6 12:00:00 2022
+X-Mozilla-Status: 0000
+X-Mozilla-Status2: 00000000
+From: TB 2 <tb2@example.com>
+Subject: TB unread
+Date: Mon, 06 Jun 2022 12:00:00 +0000
+Message-ID: <tb2@example.com>
+
+Thunderbird body 2
+
+From - Mon Jun  6 13:00:00 2022
+X-Mozilla-Status: 0009
+X-Mozilla-Status2: 00000000
+From: TB 3 <tb3@example.com>
+Subject: TB deleted
+Date: Mon, 06 Jun 2022 13:00:00 +0000
+Message-ID: <tb3@example.com>
+
+Thunderbird body 3
+
+From - Mon Jun  6 14:00:00 2022
+X-Mozilla-Status: 0005
+X-Mozilla-Status2: 00000000
+From: TB 4 <tb4@example.com>
+Subject: TB flagged
+Date: Mon, 06 Jun 2022 14:00:00 +0000
+Message-ID: <tb4@example.com>
+
+Thunderbird body 4
+

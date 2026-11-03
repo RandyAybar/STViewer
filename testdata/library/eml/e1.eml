@@ -1,0 +1,27 @@
+Message-ID: <e1@stv.test>
+Date: Sat, 07 Jan 2023 08:00:00 +0000
+From: Erin Evans <erin@stv.test>
+To: Alice Archer <alice@stv.test>
+Subject: Fwd: Holiday photos
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="sep-e1"
+
+--sep-e1
+Content-Type: text/plain; charset=utf-8
+
+Forwarding the original below.
+
+--sep-e1
+Content-Type: message/rfc822
+Content-Disposition: attachment; filename="original.eml"
+
+Message-ID: <orig@stv.test>
+Date: Fri, 06 Jan 2023 18:00:00 +0000
+From: Frank Fox <frank@stv.test>
+To: Erin Evans <erin@stv.test>
+Subject: Holiday photos
+Content-Type: text/plain; charset=utf-8
+
+The lighthouse pictures came out great.
+
+--sep-e1--

@@ -1,0 +1,145 @@
+name: Release
+
+# Push a tag `vX.Y.Z` (matching the workspace version) to build installers and CLI
+# binaries for every OS into a *draft* GitHub release; review it and publish manually.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  create-release:
+    name: Create draft release
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - id: tag
+        run: echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+      - name: Create draft release (idempotent)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || \
+            gh release create "$TAG" --draft --verify-tag --title "STViewer $TAG" \
+              --notes "See CHANGELOG.md for changes. Installers and \`stv\` CLI binaries are attached below."
+
+  app:
+    name: App (${{ matrix.name }})
+    needs: create-release
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-x64
+            os: windows-latest
+            args: ""
+          - name: macos-universal
+            os: macos-latest
+            args: --target universal-apple-darwin
+          - name: linux-x64
+            os: ubuntu-22.04
+            args: ""
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Linux system dependencies (Tauri)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libwebkit2gtk-4.1-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev \
+            libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev libxdo-dev libssl-dev
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ runner.os == 'macOS' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: release-${{ matrix.name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - name: Install frontend dependencies
+        working-directory: app
+        run: npm ci
+      # Builds the frontend (beforeBuildCommand), the app and the bundles listed in
+      # tauri.conf.json, then uploads them to the draft release. Installers are unsigned.
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: app
+          tagName: ${{ needs.create-release.outputs.tag }}
+          releaseName: STViewer ${{ needs.create-release.outputs.tag }}
+          releaseDraft: true
+          args: ${{ matrix.args }}
+
+  cli:
+    name: CLI (${{ matrix.name }})
+    needs: create-release
+    strategy:
+      fail-fast: false
+      matrix:
+        # `targets` is space-separated: both macOS targets build in one job, because
+        # hosted macOS runners are scarce (jobs get cancelled when none is free).
+        include:
+          - name: windows-x64
+            targets: x86_64-pc-windows-msvc
+            os: windows-latest
+          - name: windows-arm64
+            targets: aarch64-pc-windows-msvc
+            os: windows-latest
+          - name: macos
+            targets: x86_64-apple-darwin aarch64-apple-darwin
+            rustup_targets: x86_64-apple-darwin,aarch64-apple-darwin
+            os: macos-latest
+          - name: linux-x64
+            targets: x86_64-unknown-linux-gnu
+            os: ubuntu-22.04
+          - name: linux-arm64
+            targets: aarch64-unknown-linux-gnu
+            os: ubuntu-22.04-arm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          # dtolnay/rust-toolchain takes a comma-separated list.
+          targets: ${{ matrix.rustup_targets || matrix.targets }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: cli-${{ matrix.name }}
+      - name: Build, package and upload stv
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.create-release.outputs.tag }}
+          TARGETS: ${{ matrix.targets }}
+        run: |
+          for TARGET in $TARGETS; do
+            cargo build --release --locked -p stv --target "$TARGET"
+            name="stv-${TAG}-${TARGET}"
+            mkdir "$name"
+            cp README.md LICENSE-MIT LICENSE-APACHE NOTICE "$name/"
+            if [[ "$TARGET" == *windows* ]]; then
+              cp "target/$TARGET/release/stv.exe" "$name/"
+              7z a "$name.zip" "$name" >/dev/null
+              asset="$name.zip"
+            else
+              cp "target/$TARGET/release/stv" "$name/"
+              tar -czf "$name.tar.gz" "$name"
+              asset="$name.tar.gz"
+            fi
+            gh release upload "$TAG" "$asset" --clobber
+          done
