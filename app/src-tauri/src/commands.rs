@@ -2,6 +2,7 @@
 //! commands execute on the main (UI) thread, which must never wait on disk, the index or
 //! a library lock held by a long operation.
 
+use std::collections::VecDeque;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
@@ -175,9 +176,8 @@ pub async fn open_attachment(
     locator: Locator,
     index: u32,
 ) -> CmdResult<Option<PathBuf>> {
-    let handle = app.clone();
-    let path = blocking(move || {
-        let st = handle.state::<AppState>();
+    blocking(move || {
+        let st = app.state::<AppState>();
         // Cached when the message was displayed; otherwise this re-reads it once.
         let atts = st.attachments(source, &locator)?;
         let meta = atts
@@ -185,21 +185,19 @@ pub async fn open_attachment(
             .find(|a| a.index == index)
             .ok_or_else(|| mail_model::Error::NotFound(format!("attachment {index}")))?;
         let name = files::attachment_file_name(meta);
-        if files::runs_code(&name) && !confirm_open_program(&handle, &name) {
+        if files::runs_code(&name) && !confirm_open_program(&app, &name) {
             return Ok(None);
         }
         let bytes = st.lib.attachment(source, &locator, index)?;
         let path = files::new_open_dir(&st.open_root)?.join(name);
         files::write_untrusted(&path, &bytes)?;
+        // Starting the handler (a process spawn, or ShellExecute on Windows) blocks too.
+        app.opener()
+            .open_path(path.to_string_lossy(), None::<&str>)
+            .map_err(|e| CmdError { kind: "other", message: e.to_string() })?;
         Ok(Some(path))
     })
-    .await?;
-    if let Some(p) = &path {
-        app.opener()
-            .open_path(p.to_string_lossy(), None::<&str>)
-            .map_err(|e| CmdError { kind: "other", message: e.to_string() })?;
-    }
-    Ok(path)
+    .await
 }
 
 /// Native, window-modal warning before launching an executable attachment. Blocks, so
@@ -262,6 +260,9 @@ pub struct SaveAllReport {
     failed: Vec<(String, String)>,
 }
 
+/// Attachments [`SaveAllReport::save_all`] reads at once.
+const SAVE_READ_AHEAD: usize = 4;
+
 impl SaveAllReport {
     /// Writes `bytes` as `name` in `dir`, renamed `name (n).ext` if that file already exists.
     fn save(&mut self, dir: &Path, name: String, bytes: mail_model::Result<Vec<u8>>) {
@@ -273,6 +274,38 @@ impl SaveAllReport {
             Ok(p) => self.written.push(p),
             Err(e) => self.failed.push((name, e)),
         }
+    }
+
+    /// Saves attachments into `dir` in the order given: each item is its file name (or the
+    /// `(label, error)` to report when it has none) and what `read` loads its bytes from.
+    /// Up to [`SAVE_READ_AHEAD`] are read in parallel, as reading one can mean decoding or
+    /// re-parsing its whole message; files are still written one at a time, in order, so
+    /// the names chosen and the report are those of saving them one after another.
+    fn save_all<T: Send>(
+        &mut self,
+        dir: &Path,
+        mut items: impl Iterator<Item = (Result<String, (String, String)>, T)>,
+        read: impl Fn(T) -> mail_model::Result<Vec<u8>> + Sync,
+    ) {
+        let read = &read;
+        std::thread::scope(|s| {
+            let mut pending = VecDeque::with_capacity(SAVE_READ_AHEAD);
+            loop {
+                while pending.len() < SAVE_READ_AHEAD {
+                    let Some((name, item)) = items.next() else { break };
+                    pending.push_back(name.map(|name| (name, s.spawn(move || read(item)))));
+                }
+                match pending.pop_front() {
+                    Some(Ok((name, bytes))) => {
+                        // A panicking read fails the command, as it did when reading inline.
+                        let bytes = bytes.join().unwrap_or_else(|p| std::panic::resume_unwind(p));
+                        self.save(dir, name, bytes);
+                    }
+                    Some(Err((label, e))) => self.failed.push((label, e)),
+                    None => break,
+                }
+            }
+        });
     }
 }
 
@@ -289,9 +322,8 @@ pub async fn save_attachments(
         let msg = lib.message(source, &locator)?;
         std::fs::create_dir_all(&dir)?;
         let mut report = SaveAllReport::default();
-        for att in &msg.attachments {
-            report.save(&dir, files::attachment_file_name(att), lib.attachment(source, &locator, att.index));
-        }
+        let names = msg.attachments.iter().map(|att| (Ok(files::attachment_file_name(att)), att.index));
+        report.save_all(&dir, names, |index| lib.attachment(source, &locator, index));
         Ok(report)
     })
     .await
@@ -317,16 +349,16 @@ pub async fn save_attachment_list(
         let st = app.state::<AppState>();
         std::fs::create_dir_all(&dir)?;
         let mut report = SaveAllReport::default();
-        for r in &items {
+        // Names are looked up here, in order, so attachments of one message share one
+        // (cached) read of it; only the attachment bytes are read in parallel.
+        let named = items.iter().map(|r| {
             let name = st.attachments(r.source, &r.message).map_err(|e| e.to_string()).and_then(|atts| {
                 let meta = atts.iter().find(|a| a.index == r.index).ok_or("no such attachment")?;
                 Ok(files::attachment_file_name(meta))
             });
-            match name {
-                Ok(name) => report.save(&dir, name, st.lib.attachment(r.source, &r.message, r.index)),
-                Err(e) => report.failed.push((format!("attachment {}", r.index), e)),
-            }
-        }
+            (name.map_err(|e| (format!("attachment {}", r.index), e)), r)
+        });
+        report.save_all(&dir, named, |r| st.lib.attachment(r.source, &r.message, r.index));
         Ok(report)
     })
     .await

@@ -17,6 +17,8 @@ const PAGE_SIZE = 200;
 const PAGE_CAP = 60;
 /** Pages re-fetched by `invalidate` (a screenful plus prefetch). */
 const REFETCH_ON_INVALIDATE = 3;
+/** Page fetches `rowsAsync` keeps in flight; far below `PAGE_CAP`, so no page is evicted before it is read. */
+const BULK_FETCHES = 4;
 
 /**
  * Virtual-list data: a known row count plus pages of `PAGE_SIZE` rows fetched on
@@ -56,6 +58,32 @@ export abstract class PagedList<T = Row> {
     if (i < 0 || i >= this.count) return undefined;
     await this.#load(Math.floor(i / PAGE_SIZE));
     return this.row(i);
+  }
+
+  /** Rows at `indices`, in that order, fetching missing pages a few at a time; rows that fail to load are left out. */
+  async rowsAsync(indices: number[]): Promise<T[]> {
+    // Positions in `indices` per page.
+    const pages = new Map<number, number[]>();
+    indices.forEach((i, k) => {
+      if (i < 0 || i >= this.count) return;
+      const p = Math.floor(i / PAGE_SIZE);
+      const at = pages.get(p);
+      if (at) at.push(k);
+      else pages.set(p, [k]);
+    });
+    const queue = [...pages];
+    const found = new Array<T | undefined>(indices.length);
+    let next = 0;
+    const worker = async () => {
+      while (next < queue.length) {
+        const [p, at] = queue[next++];
+        await this.#load(p);
+        // Read at once: pages landing later may evict this one from the LRU.
+        for (const k of at) found[k] = this.row(indices[k]);
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(BULK_FETCHES, queue.length) }, worker));
+    return found.filter((r): r is T => r !== undefined);
   }
 
   /** Loads page `p` unless resident; `refetch` replaces a resident page in place. */

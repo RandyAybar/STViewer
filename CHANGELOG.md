@@ -6,6 +6,17 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Faster on hot paths: opening an email loads its conversation at the same time,
+  startup reads sources and indexing progress together, a newly added source opens while
+  the source list refreshes, and tagging, saving or exporting a large selection fetches
+  the missing list pages a few at a time instead of one by one.
+- Save all / save selected attachments reads up to four attachments in parallel (files
+  are still written one at a time, in order).
+- macOS CI and release builds run on Intel runners; the universal app and the arm64 CLI
+  are cross-compiled.
+
 ## [0.1.0] - 2026-11-03
 
 First public release.

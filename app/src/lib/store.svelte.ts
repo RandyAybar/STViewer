@@ -205,18 +205,19 @@ class Store {
   async init(): Promise<void> {
     if (this.#started) return;
     this.#started = true;
-    await listen<IndexProgress[]>("index-progress", (e) => this.#applyProgress(e.payload));
-    await listen<AgentAccess>("agent-access-state", (e) => (this.agent = e.payload));
-    // One event per agent tool call; only the status-bar flash uses it.
-    await listen("agent-access", () => this.agentPulse++);
-    void this.refreshAgent();
-    await this.refreshSources();
     void this.refreshTags();
-    try {
-      this.#applyProgress(await api.indexProgress());
-    } catch (e) {
-      this.toast(`Could not read indexing progress: ${errMsg(e)}`, "error");
-    }
+    // Subscribe before reading the state the events update, so no change falls in between.
+    await Promise.all([
+      listen<IndexProgress[]>("index-progress", (e) => this.#applyProgress(e.payload)),
+      listen<AgentAccess>("agent-access-state", (e) => (this.agent = e.payload)),
+      // One event per agent tool call; only the status-bar flash uses it.
+      listen("agent-access", () => this.agentPulse++),
+    ]);
+    void this.refreshAgent();
+    // Read together; the progress snapshot still applies after the sources that seed it.
+    const [, progress] = await Promise.allSettled([this.refreshSources(), api.indexProgress()]);
+    if (progress.status === "fulfilled") this.#applyProgress(progress.value);
+    else this.toast(`Could not read indexing progress: ${errMsg(progress.reason)}`, "error");
     const first = this.sources[0];
     if (first) await this.expandSource(first.id, true);
   }
@@ -254,10 +255,12 @@ class Store {
     try {
       const res = await api.addPaths(paths);
       for (const [path, err] of res.errors) this.toast(`${path}: ${err}`, "error");
+      // Opening the first new source does not need the refreshed list; only the toast waits for it.
+      const opened = res.added.length ? this.expandSource(res.added[0].id, true) : undefined;
       await this.refreshSources();
       if (res.added.length) {
         this.toast(`Added ${res.added.length} source${res.added.length > 1 ? "s" : ""}; indexing in background`);
-        await this.expandSource(res.added[0].id, true);
+        await opened;
       }
     } catch (e) {
       this.toast(errMsg(e), "error");
@@ -694,12 +697,7 @@ class Store {
   async selectedAttachments(): Promise<AttachmentRow[]> {
     const list = this.attachments;
     if (!list) return [];
-    const out: AttachmentRow[] = [];
-    for (const i of [...this.selection].sort((a, b) => a - b)) {
-      const r = await list.rowAsync(i);
-      if (r) out.push(r);
-    }
-    return out;
+    return list.rowsAsync([...this.selection].sort((a, b) => a - b));
   }
 
   // ---- tags ----
@@ -753,21 +751,18 @@ class Store {
   /** Tag targets of the selection in whichever list is showing, in list order. */
   async selectedTargets(): Promise<TagTarget[]> {
     const idx = [...this.selection].sort((a, b) => a - b);
-    const out: TagTarget[] = [];
     const att = this.attachments;
     const tagged = this.tagged;
     const list = this.list;
-    for (const i of idx) {
-      if (att) {
-        const r = await att.rowAsync(i);
-        if (r) out.push({ source: r.source, message: r.message, attachment: r.index });
-      } else if (tagged) {
-        const r = await tagged.rowAsync(i);
-        if (r) out.push(r.target);
-      } else if (list) {
-        const r = await list.rowAsync(i);
-        if (r?.header.locator) out.push({ source: r.source, message: r.header.locator, attachment: null });
-      }
+    if (att) {
+      const rows = await att.rowsAsync(idx);
+      return rows.map((r) => ({ source: r.source, message: r.message, attachment: r.index }));
+    }
+    if (tagged) return (await tagged.rowsAsync(idx)).map((r) => r.target);
+    if (!list) return [];
+    const out: TagTarget[] = [];
+    for (const r of await list.rowsAsync(idx)) {
+      if (r.header.locator) out.push({ source: r.source, message: r.header.locator, attachment: null });
     }
     return out;
   }
@@ -803,10 +798,11 @@ class Store {
 
   /** `filter` replaces the Tagged view's chip filter (renamed / deleted tag). */
   async #afterTagChange(filter?: string | null): Promise<void> {
-    await this.refreshTags();
     for (const id of Object.keys(this.expandedSources)) {
       if (this.expandedSources[Number(id)]) void this.refreshTaggedTotal(Number(id));
     }
+    // The Tagged view reloads once the tag list is fresh, so its pills and chips get the (new / renamed) colors.
+    await this.refreshTags();
     const t = this.tagged;
     if (t) {
       this.tagged = new TaggedList(t.source, filter === undefined ? t.tag : filter);
@@ -920,11 +916,9 @@ class Store {
     }
     const list = this.list;
     if (!list) return [];
-    const idx = [...this.selection].sort((a, b) => a - b);
     const out: [SourceId, Locator][] = [];
-    for (const i of idx) {
-      const r = await list.rowAsync(i);
-      if (r?.header.locator) out.push([r.source, r.header.locator]);
+    for (const r of await list.rowsAsync([...this.selection].sort((a, b) => a - b))) {
+      if (r.header.locator) out.push([r.source, r.header.locator]);
     }
     return out;
   }

@@ -48,15 +48,17 @@
     loading = true;
     let stale = false;
     const timer = setTimeout(async () => {
+      const pending = api.message(e.source, e.locator);
+      // The backend reads the message itself for the conversation, so both load at once.
+      api
+        .conversation(e.source, e.locator)
+        .then((c) => !stale && (conv = c))
+        .catch((err: unknown) => !stale && (convError = errMsg(err)));
       try {
-        const m = await api.message(e.source, e.locator);
+        const m = await pending;
         if (stale) return;
         msg = m;
         loading = false;
-        api
-          .conversation(e.source, e.locator)
-          .then((c) => !stale && (conv = c))
-          .catch((err: unknown) => !stale && (convError = errMsg(err)));
       } catch (err) {
         if (stale) return;
         error = errMsg(err);
